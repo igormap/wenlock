@@ -36,26 +36,23 @@ export function Login() {
   };
 
   return (
-    <div className="bg-white max-w-[712px] h-[800px] py-16 px-12 rounded-md">
+    <div className="bg-white max-w-[712px] h-[800px] py-16 px-12 rounded-md flex flex-col">
       <h1 className="mb-8 text-[#0290a4] text-left text-6xl tracking-wide font-bold">
         Bem vindo!
       </h1>
       <p className="mb-12 text-[#0B2B25] text-2xl">Entre com sua conta</p>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="space-y-4 max-w-md mx-auto"
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Input
           {...register("name")}
           error={errors.name?.message}
-          className="h-16"
+          className="h-16 w-full"
           placeholder="E-mail ou N° matrícula"
         />
         <div className="relative">
           <Input
             {...register("email")}
             error={errors.email?.message}
-            className="h-16 mt-8"
+            className="h-16 w-full mt-8"
             placeholder="Senha"
             type={showPassword ? "text" : "password"}
           />
@@ -77,7 +74,7 @@ export function Login() {
         </Button>
         <br />
         <Link
-          className="txt-[#0290a4] text-center block cursor-pointer"
+          className="text-[#0290a4] text-center block cursor-pointer"
           to={""}
         >
           Esqueci minha senha
