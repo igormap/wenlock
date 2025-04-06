@@ -12,6 +12,7 @@ function App() {
         </Route>
         <Route path="dash" element={<LayoutDashboard />}>
           <Route index element={<div />} />
+          <Route path="users" element={<div />} />
         </Route>
       </Routes>
     </BrowserRouter>
