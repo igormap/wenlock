@@ -8,7 +8,7 @@ export const LayoutDashboard = () => {
       <Sidebar />
       <div className="flex flex-col flex-1">
         <Topbar />
-        <div className="bg-[#F3F3F3]">
+        <div className="bg-[#F3F3F3] h-screen">
           <Outlet />
         </div>
       </div>
