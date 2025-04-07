@@ -4,6 +4,7 @@ import { LayoutAuth } from "./layouts/auth";
 import { LayoutDashboard } from "./layouts/dashboard";
 import { Home } from "./pages/dashboard/home";
 import { UsersPage } from "./pages/dashboard/users";
+import { AddUserPage } from "./pages/dashboard/add-user";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="dash" element={<LayoutDashboard />}>
           <Route index element={<Home />} />
           <Route path="users" element={<UsersPage />} />
+          <Route path="add-user" element={<AddUserPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

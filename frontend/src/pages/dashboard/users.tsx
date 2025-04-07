@@ -2,8 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Eye, Pencil, Plus, Search, Trash } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 export const UsersPage = () => {
+  const navigate = useNavigate();
+
   const usuarios = [
     { id: 1, nome: "Milena Santana Borges" },
     { id: 2, nome: "Igor Fernandes" },
@@ -46,7 +49,10 @@ export const UsersPage = () => {
           />
           <Search className="absolute top-4 left-4" />
         </div>
-        <Button className="bg-[#0290A4] h-14 w-56 text-lg">
+        <Button
+          className="bg-[#0290A4] h-14 w-56 text-lg"
+          onClick={() => navigate("/dash/add-user")}
+        >
           <Plus size={24} />
           Cadastrar usuário
         </Button>
