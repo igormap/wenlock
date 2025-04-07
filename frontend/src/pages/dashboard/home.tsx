@@ -1,5 +1,5 @@
-import { DateTime } from "luxon";
 import { ReactComponent as SvgPeopleIdea } from "@/assets/img/illustrations/PeopleIdea.svg";
+import { DateTime } from "luxon";
 
 export const Home = () => {
   return (

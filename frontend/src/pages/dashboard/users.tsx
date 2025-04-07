@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { VisualizeUser } from "@/components/visualize-user";
 import { Eye, Pencil, Plus, Search, Trash } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
@@ -8,19 +9,19 @@ export const UsersPage = () => {
   const navigate = useNavigate();
 
   const usuarios = [
-    { id: 1, nome: "Milena Santana Borges" },
-    { id: 2, nome: "Igor Fernandes" },
+    { id: 1, nome: "Milena Santana Borges", email: "user@email.com" },
+    { id: 2, nome: "Igor Fernandes", email: "user@email.com" },
   ];
 
   const allUsers = [
-    { id: 1, nome: "Milena Santana Borges" },
-    { id: 2, nome: "Igor Fernandes" },
-    { id: 3, nome: "Joana Alves" },
-    { id: 4, nome: "Carlos Souza" },
-    { id: 5, nome: "Amanda Lima" },
-    { id: 6, nome: "Lucas Silva" },
-    { id: 7, nome: "Fernanda Ribeiro" },
-    { id: 8, nome: "Marcos Paulo" },
+    { id: 1, nome: "Milena Santana Borges", email: "user@email.com" },
+    { id: 2, nome: "Igor Fernandes", email: "user@email.com" },
+    { id: 3, nome: "Joana Alves", email: "user@email.com" },
+    { id: 4, nome: "Carlos Souza", email: "user@email.com" },
+    { id: 5, nome: "Amanda Lima", email: "user@email.com" },
+    { id: 6, nome: "Lucas Silva", email: "user@email.com" },
+    { id: 7, nome: "Fernanda Ribeiro", email: "user@email.com" },
+    { id: 8, nome: "Marcos Paulo", email: "user@email.com" },
   ];
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -71,9 +72,11 @@ export const UsersPage = () => {
                 <tr key={user.id} className="bg-white border-b">
                   <td className="px-6 py-4">{user.nome}</td>
                   <td className="px-6 py-4 text-right">
-                    <ActionItem>
-                      <Eye size={18} />
-                    </ActionItem>
+                    <VisualizeUser user={user}>
+                      <ActionItem>
+                        <Eye size={18} />
+                      </ActionItem>
+                    </VisualizeUser>
                     <ActionItem>
                       <Pencil size={18} />
                     </ActionItem>
@@ -117,7 +120,7 @@ export const UsersPage = () => {
 interface ActionItemProps {
   children: React.ReactNode;
 }
-const ActionItem = ({ children }: ActionItemProps) => {
+export const ActionItem = ({ children }: ActionItemProps) => {
   return (
     <button
       type="button"

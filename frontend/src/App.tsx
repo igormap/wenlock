@@ -5,10 +5,12 @@ import { LayoutDashboard } from "./layouts/dashboard";
 import { Home } from "./pages/dashboard/home";
 import { UsersPage } from "./pages/dashboard/users";
 import { AddUserPage } from "./pages/dashboard/add-user";
+import { Toaster } from "./components/ui/sonner";
 
 function App() {
   return (
     <BrowserRouter>
+      <Toaster duration={10000} position="top-right" offset={60} />
       <Routes>
         <Route element={<LayoutAuth />}>
           <Route index element={<Login />} />

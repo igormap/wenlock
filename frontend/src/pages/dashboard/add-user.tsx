@@ -145,7 +145,11 @@ export const AddUserPage = () => {
   );
 };
 
-const FormSectionTitle = ({ children }: { children: React.ReactNode }) => {
+export const FormSectionTitle = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   return (
     <div className="flex items-center gap-5 mb-5">
       <h2 className="font-bold min-w-max">{children}</h2>
