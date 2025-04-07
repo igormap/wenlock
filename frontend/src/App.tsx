@@ -6,6 +6,7 @@ import { Home } from "./pages/dashboard/home";
 import { UsersPage } from "./pages/dashboard/users";
 import { AddUserPage } from "./pages/dashboard/add-user";
 import { Toaster } from "./components/ui/sonner";
+import { PasswordRecovery } from "./pages/auth/PasswordRecovery";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route element={<LayoutAuth />}>
           <Route index element={<Login />} />
+          <Route path="password-recovery" element={<PasswordRecovery />} />
         </Route>
         <Route path="dash" element={<LayoutDashboard />}>
           <Route index element={<Home />} />
