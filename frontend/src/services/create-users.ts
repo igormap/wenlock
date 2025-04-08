@@ -10,7 +10,6 @@ export interface CreateUser {
 
 export async function createUser(body: CreateUser): Promise<UserTokenResponse> {
   const URL = "auth/register";
-  console.log("aqui");
   const res = await API.post<UserTokenResponse>(URL, body);
 
   return res.data;

@@ -1,3 +1,4 @@
+import { getUser } from "@/contexts/AuthContext";
 import {
   Popover,
   PopoverTrigger,
@@ -8,6 +9,7 @@ import { useNavigate } from "react-router";
 
 export const Topbar = () => {
   const navigate = useNavigate();
+  const user = getUser();
 
   return (
     <div className="bg-white w-full flex items-center px-16 justify-end overflow-autos h-20 shadow-custom-light border-b">
@@ -19,12 +21,8 @@ export const Topbar = () => {
           <div className="flex gap-1.5">
             <UserAvatar />
             <div className="flex flex-col justify-between">
-              <span className="text-[#0290a4] font-bold">
-                Milena Santana Borges
-              </span>
-              <span className="text-[#0B2B25] opacity-80">
-                milena.santana@energy.org.br
-              </span>
+              <span className="text-[#0290a4] font-bold">{user?.name}</span>
+              <span className="text-[#0B2B25] opacity-80">{user?.email}</span>
             </div>
           </div>
           <button

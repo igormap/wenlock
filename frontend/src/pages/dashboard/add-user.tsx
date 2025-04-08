@@ -1,69 +1,98 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { UserForm } from "@/components/user-form";
 import { createUser } from "@/services/create-users";
+import { editUser } from "@/services/edit-user";
+import { getUser } from "@/services/get-user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeft, Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { ChevronLeft } from "lucide-react";
+import { useCallback, useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
+import useSWR from "swr";
 import { z } from "zod";
 
-export const schema = z
-  .object({
-    name: z
-      .string()
-      .nonempty("Nome é obrigatório")
-      .min(3, "Nome deve ter pelo menos 3 caracteres")
-      .max(30, "Nome pode ter no máximo 30 caracteres"),
+export const getSchema = (isEdit = false) =>
+  z
+    .object({
+      name: z
+        .string()
+        .nonempty("Nome é obrigatório")
+        .min(3, "Nome deve ter pelo menos 3 caracteres")
+        .max(30, "Nome pode ter no máximo 30 caracteres"),
 
-    registration: z
-      .string()
-      .nonempty("Matrícula é obrigatória")
-      .min(4, "Mínimo 4 caracteres")
-      .max(10, "Máximo 10 caracteres"),
+      registration: z
+        .string()
+        .nonempty("Matrícula é obrigatória")
+        .min(4, "Mínimo 4 caracteres")
+        .max(10, "Máximo 10 caracteres"),
 
-    email: z
-      .string()
-      .nonempty("Email é obrigatório")
-      .email("Email inválido")
-      .max(40, "Email pode ter no máximo 40 caracteres"),
+      email: z
+        .string()
+        .nonempty("Email é obrigatório")
+        .email("Email inválido")
+        .max(40, "Email pode ter no máximo 40 caracteres"),
 
-    password: z
-      .string()
-      .nonempty("Senha é obrigatória")
-      .min(6, "A senha deve ter no mínimo 6 caracteres"),
+      password: isEdit
+        ? z.string().optional()
+        : z
+            .string()
+            .nonempty("Senha é obrigatória")
+            .min(6, "A senha deve ter no mínimo 6 caracteres"),
 
-    confirmPassword: z
-      .string()
-      .nonempty("Confirmação de senha é obrigatória")
-      .min(6, "A senha deve ter no mínimo 6 caracteres"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "As senhas não coincidem",
-    path: ["confirmPassword"],
-  });
+      confirmPassword: isEdit
+        ? z.string().optional()
+        : z
+            .string()
+            .nonempty("Confirmação de senha é obrigatória")
+            .min(6, "A senha deve ter no mínimo 6 caracteres"),
+    })
+    .refine((data) => isEdit || data.password === data.confirmPassword, {
+      message: "As senhas não coincidem",
+      path: ["confirmPassword"],
+    });
 
-type FormData = z.infer<typeof schema>;
+type FormData = z.infer<ReturnType<typeof getSchema>>;
 
 export const AddUserPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState(false);
+  const userToEdit = location.search.split("?")[1];
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(schema),
+  const fetchUser = useCallback(async () => {
+    try {
+      return await getUser(userToEdit);
+    } catch (error) {}
+  }, [userToEdit]);
+
+  const { data: user } = useSWR(["user", userToEdit], fetchUser);
+  console.log(userToEdit);
+
+  const userForm = useForm<FormData>({
+    resolver: zodResolver(getSchema(!!userToEdit)),
+    defaultValues: {
+      name: user?.name,
+      email: user?.email,
+      registration: user?.registration,
+    },
   });
 
-  const onSubmit = handleSubmit(async (data) => {
+  useEffect(() => {
+    if (!user) return;
+    userForm.reset({
+      name: user?.name,
+      email: user?.email,
+      registration: user?.registration,
+    });
+  }, [user]);
+
+  const onSubmit = userForm.handleSubmit(async (data) => {
     try {
       const { confirmPassword, ...body } = data;
-      const res = await createUser(body);
+      const { password, ...bodyWithoutPassword } = body;
+      user
+        ? await editUser(bodyWithoutPassword)
+        : await createUser({ body, password: "" });
       toast.success("Cadastro realizado");
       navigate("/dash/users");
     } catch (error) {
@@ -75,121 +104,11 @@ export const AddUserPage = () => {
     <div className="py-3 px-9">
       <h1 className="flex items-center gap-2 mb-1.5 text-4xl font-bold">
         <ChevronLeft onClick={() => navigate(-1)} className="cursor-pointer" />
-        Cadastro de Usuário
+        {userToEdit ? "Editar Usuário" : "Cadastro de Usuário"}
       </h1>
-      <main className="p-4 bg-white rounded">
-        <form onSubmit={onSubmit}>
-          <FormSectionTitle>Dados do Usuário</FormSectionTitle>
-          <FormLine>
-            <Input
-              {...register("name")}
-              placeholder="Insira o nome completo*"
-              className="w-full h-14 bg-[#F4F4F4] border-none hover:bg-[#EAEAEA]"
-              error={errors.name?.message}
-              maxLength={30}
-            />
-            <Input
-              {...register("registration")}
-              placeholder="Insira o Nº da matrícula"
-              className="w-full h-14 bg-[#F4F4F4] border-none hover:bg-[#EAEAEA]"
-              error={errors.registration?.message}
-            />
-          </FormLine>
-          <FormLine>
-            <Input
-              {...register("email")}
-              placeholder="Insira o email*"
-              className="w-full h-14 bg-[#F4F4F4] border-none hover:bg-[#EAEAEA]"
-              error={errors.email?.message}
-            />
-          </FormLine>
-
-          <FormSectionTitle>Dados de acesso</FormSectionTitle>
-          <FormLine>
-            <div className="relative">
-              <Input
-                {...register("password")}
-                placeholder="Senha*"
-                className="w-full h-14 bg-[#F4F4F4] border-none hover:bg-[#EAEAEA]"
-                error={errors.password?.message}
-                type={showPassword ? "text" : "password"}
-              />
-              {showPassword ? (
-                <Eye
-                  className="absolute right-4 top-4 cursor-pointer"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                />
-              ) : (
-                <EyeOff
-                  className="absolute right-4 top-4 cursor-pointer"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                />
-              )}
-            </div>
-            <div className="relative">
-              <Input
-                {...register("confirmPassword")}
-                placeholder="Repetir Senha*"
-                className="w-full h-14 bg-[#F4F4F4] border-none hover:bg-[#EAEAEA]"
-                error={errors.confirmPassword?.message}
-                type={confirmPassword ? "text" : "password"}
-              />
-              {confirmPassword ? (
-                <Eye
-                  className="absolute right-4 top-4 cursor-pointer"
-                  onClick={() => setConfirmPassword((prev) => !prev)}
-                />
-              ) : (
-                <EyeOff
-                  className="absolute right-4 top-4 cursor-pointer"
-                  onClick={() => setConfirmPassword((prev) => !prev)}
-                />
-              )}
-            </div>
-          </FormLine>
-          <div className="flex items-center gap-2.5 justify-end">
-            <Button
-              type="button"
-              variant={"outline"}
-              className="h-14 w-44 font-bold text-lg border-[#0B2B25]"
-              onClick={() => {
-                toast.warning("Cadastro cancelado", {
-                  style: {
-                    backgroundColor: "#FF7700",
-                    color: "#fff",
-                  },
-                });
-                navigate(-1);
-              }}
-            >
-              Cancelar
-            </Button>
-            <Button
-              type="submit"
-              className="h-14 w-44 font-bold text-lg bg-[#0290A4]"
-            >
-              Cadastrar
-            </Button>
-          </div>
-        </form>
-      </main>
+      <FormProvider {...userForm}>
+        <UserForm onSubmit={onSubmit} />
+      </FormProvider>
     </div>
   );
-};
-
-export const FormSectionTitle = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
-  return (
-    <div className="flex items-center gap-5 mb-5">
-      <h2 className="font-bold min-w-max">{children}</h2>
-      <div className="w-full h-[1px] bg-[#707070]" />
-    </div>
-  );
-};
-
-const FormLine = ({ children }: { children: React.ReactNode }) => {
-  return <div className="grid gap-8 grid-cols-2 w-full mb-8">{children}</div>;
 };

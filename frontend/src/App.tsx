@@ -15,8 +15,14 @@ import { Toaster } from "./components/ui/sonner";
 import { JSX } from "react";
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
-  const { token } = useAuth();
-  return token ? children : <Navigate to="/" />;
+  const { token, loading } = useAuth();
+
+  if (loading) {
+    // Pode trocar isso por um spinner ou tela de carregamento bonita
+    return <div>Carregando...</div>;
+  }
+
+  return token ? children : <Navigate to="/" replace />;
 }
 
 function AppRoutes() {
@@ -39,7 +45,7 @@ function AppRoutes() {
       >
         <Route index element={<Home />} />
         <Route path="users" element={<UsersPage />} />
-        <Route path="add-user" element={<AddUserPage />} />
+        <Route path="user-form" element={<AddUserPage />} />
       </Route>
     </Routes>
   );

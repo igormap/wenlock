@@ -1,4 +1,3 @@
-import { FormSectionTitle } from "@/pages/dashboard/add-user";
 import { ActionItem } from "@/pages/dashboard/users";
 import { X } from "lucide-react";
 import { DateTime } from "luxon";
@@ -13,6 +12,7 @@ import {
   DrawerTrigger,
 } from "./ui/drawer";
 import { UserResponse } from "@/services/get-users";
+import { FormSectionTitle } from "./user-form";
 
 interface Props {
   user: UserResponse;

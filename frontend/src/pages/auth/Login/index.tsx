@@ -22,7 +22,6 @@ export function Login() {
     email: z
       .string()
       .nonempty("Campo obrigatório")
-      .email("Email invalido")
       .min(3, "Mínimo 3 caracteres"),
     password: z.string().nonempty("Campo obrigatório"),
   });
@@ -41,7 +40,7 @@ export function Login() {
       const response = await login(data.email, data.password);
 
       const { token, user } = response;
-      setAuthData(token, { ...user, createdAt: new Date().toISOString() });
+      setAuthData({ ...user }, token);
 
       navigate("/dash");
 

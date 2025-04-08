@@ -13,8 +13,16 @@ export class UsersService {
   }
 
   async findOne(registration: string) {
-    const user = await this.prisma.user.findUnique({ where: { registration } });
-    if (!user) throw new NotFoundException('Usuário não encontrado');
+    const user = await this.prisma.user.findUnique({
+      where: { registration },
+    });
+
+    if (!user) {
+      throw new NotFoundException(
+        `Usuário com matrícula ${registration} não encontrado`,
+      );
+    }
+
     return user;
   }
 
