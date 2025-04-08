@@ -9,20 +9,22 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { AlertCircle } from "lucide-react";
+import { login } from "@/services/auth";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
+  const { login: setAuthData } = useAuth();
+
   const schema = z.object({
-    name: z
-      .string()
-      .nonempty("Campo obrigatório")
-      .min(3, "Mínimo 3 caracteres"),
     email: z
       .string()
-      .nonempty("O email é obrigatório")
-      .email("Informe um email válido"),
+      .nonempty("Campo obrigatório")
+      .email("Email invalido")
+      .min(3, "Mínimo 3 caracteres"),
+    password: z.string().nonempty("Campo obrigatório"),
   });
   type FormData = z.infer<typeof schema>;
 
@@ -34,13 +36,17 @@ export function Login() {
     resolver: zodResolver(schema),
   });
 
-  // const onSubmit = (data: FormData) => {
-  //   console.log("Dados enviados:", data);
-  // };
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const response = await login(data.email, data.password);
 
-  const onSubmit = handleSubmit(
-    (data) => {},
-    () => {
+      const { token, user } = response;
+      setAuthData(token, { ...user, createdAt: new Date().toISOString() });
+
+      navigate("/dash");
+
+      toast.success("Usuario logado com sucesso");
+    } catch (error) {
       toast.error("Usuário/Senha inválido(a)", {
         closeButton: true,
         icon: <AlertCircle />,
@@ -49,8 +55,9 @@ export function Login() {
           color: "#fff",
         },
       });
+      console.error("Erro ao fazer login", error);
     }
-  );
+  });
 
   return (
     <div className="bg-white max-w-[712px] h-[800px] py-16 px-12 rounded-md flex flex-col">
@@ -60,15 +67,15 @@ export function Login() {
       <p className="mb-12 text-[#0B2B25] text-2xl">Entre com sua conta</p>
       <form onSubmit={onSubmit}>
         <Input
-          {...register("name")}
-          error={errors.name?.message}
+          {...register("email")}
+          error={errors.email?.message}
           className="h-16 w-full"
           placeholder="E-mail ou N° matrícula"
         />
         <div className="relative">
           <Input
-            {...register("email")}
-            error={errors.email?.message}
+            {...register("password")}
+            error={errors.password?.message}
             className="h-16 w-full mt-8"
             placeholder="Senha"
             type={showPassword ? "text" : "password"}

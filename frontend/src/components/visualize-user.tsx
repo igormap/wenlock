@@ -12,9 +12,10 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "./ui/drawer";
+import { UserResponse } from "@/services/get-users";
 
 interface Props {
-  user: any;
+  user: UserResponse;
   children: React.ReactNode;
 }
 
@@ -32,15 +33,12 @@ export const VisualizeUser = ({ user, children }: Props) => {
               <X size={24} />
             </DrawerClose>
           </DrawerTitle>
-          {/* <DrawerDescription>
-        This action cannot be undone.
-      </DrawerDescription> */}
         </DrawerHeader>
         <div className="px-9">
           <FormSectionTitle>Dados do usuário</FormSectionTitle>
           <InformationLine>
-            <InformationGroup name="Nome" value={user.nome} />
-            <InformationGroup name="Matrícula" value={user.id} />
+            <InformationGroup name="Nome" value={user.name} />
+            <InformationGroup name="Matrícula" value={user.registration} />
           </InformationLine>
           <InformationLine>
             <InformationGroup name="Email" value={user.email} />
@@ -50,11 +48,14 @@ export const VisualizeUser = ({ user, children }: Props) => {
           <InformationLine>
             <InformationGroup
               name="Data de criação"
-              value={DateTime.now().toFormat("dd/MM/yyyy")}
+              value={DateTime.fromISO(user.createdAt).toFormat("dd/MM/yyyy")}
             />
             <InformationGroup
               name="Ultima edição"
-              value={DateTime.now().toFormat("dd/MM/yyyy") || "Nenhuma"}
+              value={
+                DateTime.fromISO(user.createdAt).toFormat("dd/MM/yyyy") ||
+                "Nenhuma"
+              }
             />
           </InformationLine>
         </div>
