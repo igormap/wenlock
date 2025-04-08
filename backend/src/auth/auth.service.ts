@@ -42,11 +42,13 @@ export class AuthService {
 
     const { password, id, ...userWithoutPassword } = user;
 
-    return { userWithoutPassword, token: this.generateToken(user) };
+    return {
+      user: userWithoutPassword,
+      token: this.generateToken(user),
+    };
   }
 
   private generateToken(user: Omit<User, 'password'>) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     return this.jwt.sign({ sub: user.id, email: user.email });
   }
 }

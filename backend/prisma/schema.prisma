@@ -1,3 +1,6 @@
+// prisma/schema.prisma
+// DEBUG: usando banco -> env("DATABASE_URL")
+
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -9,8 +12,8 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = "postgresql://nadny:123456@localhost:5432/wenlock"
 }
 
 model User {
