@@ -1,6 +1,6 @@
 import { API } from "./api";
 
-interface LoginResponse {
+export interface UserTokenResponse {
   token: string;
   user: {
     id: number;
@@ -13,8 +13,8 @@ interface LoginResponse {
 export async function login(
   email: string,
   password: string
-): Promise<LoginResponse> {
-  const response = await API.post<LoginResponse>("/auth/login", {
+): Promise<UserTokenResponse> {
+  const response = await API.post<UserTokenResponse>("/auth/login", {
     email,
     password,
   });

@@ -49,7 +49,7 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Toaster position="top-right" duration={5000} />
+        <Toaster position="top-right" duration={2000} />
         <AppRoutes />
       </BrowserRouter>
     </AuthProvider>

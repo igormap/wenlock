@@ -1,26 +1,42 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { createUser } from "@/services/create-users";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeft, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { toast } from "sonner";
 import { z } from "zod";
 
 export const schema = z
   .object({
     name: z
       .string()
+      .nonempty("Nome é obrigatório")
       .min(3, "Nome deve ter pelo menos 3 caracteres")
-      .max(30, "Máximo 30 caracteres"),
+      .max(30, "Nome pode ter no máximo 30 caracteres"),
+
     registration: z
       .string()
-      .min(4, "Mínimo 4 letras")
+      .nonempty("Matrícula é obrigatória")
+      .min(4, "Mínimo 4 caracteres")
       .max(10, "Máximo 10 caracteres"),
-    email: z.string().email("Email inválido").max(40, "Máximo 40 caracteres"),
-    password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres"),
+
+    email: z
+      .string()
+      .nonempty("Email é obrigatório")
+      .email("Email inválido")
+      .max(40, "Email pode ter no máximo 40 caracteres"),
+
+    password: z
+      .string()
+      .nonempty("Senha é obrigatória")
+      .min(6, "A senha deve ter no mínimo 6 caracteres"),
+
     confirmPassword: z
       .string()
+      .nonempty("Confirmação de senha é obrigatória")
       .min(6, "A senha deve ter no mínimo 6 caracteres"),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -44,9 +60,16 @@ export const AddUserPage = () => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: FormData) => {
-    console.log("Dados válidos:", data);
-  };
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const { confirmPassword, ...body } = data;
+      const res = await createUser(body);
+      toast.success("Cadastro realizado");
+      navigate("/dash/users");
+    } catch (error) {
+      toast.error("Erro ao criar usuario");
+    }
+  });
 
   return (
     <div className="py-3 px-9">
@@ -55,7 +78,7 @@ export const AddUserPage = () => {
         Cadastro de Usuário
       </h1>
       <main className="p-4 bg-white rounded">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={onSubmit}>
           <FormSectionTitle>Dados do Usuário</FormSectionTitle>
           <FormLine>
             <Input
@@ -105,7 +128,7 @@ export const AddUserPage = () => {
             </div>
             <div className="relative">
               <Input
-                {...register("password")}
+                {...register("confirmPassword")}
                 placeholder="Repetir Senha*"
                 className="w-full h-14 bg-[#F4F4F4] border-none hover:bg-[#EAEAEA]"
                 error={errors.confirmPassword?.message}
@@ -129,6 +152,15 @@ export const AddUserPage = () => {
               type="button"
               variant={"outline"}
               className="h-14 w-44 font-bold text-lg border-[#0B2B25]"
+              onClick={() => {
+                toast.warning("Cadastro cancelado", {
+                  style: {
+                    backgroundColor: "#FF7700",
+                    color: "#fff",
+                  },
+                });
+                navigate(-1);
+              }}
             >
               Cancelar
             </Button>
