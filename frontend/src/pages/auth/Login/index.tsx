@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router";
-import { ReactComponent as SvgEye } from "@/assets/img/icons/EyeOpen.svg";
-import { ReactComponent as SvgEyeClose } from "@/assets/img/icons/EyeClose.svg";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Eye, EyeOff } from "lucide-react";
 import { login } from "@/services/auth";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -80,12 +78,12 @@ export function Login() {
             type={showPassword ? "text" : "password"}
           />
           {showPassword ? (
-            <SvgEye
+            <Eye
               className="absolute right-4 top-14 cursor-pointer"
               onClick={() => setShowPassword((prev) => !prev)}
             />
           ) : (
-            <SvgEyeClose
+            <EyeOff
               className="absolute right-4 top-14 cursor-pointer"
               onClick={() => setShowPassword((prev) => !prev)}
             />

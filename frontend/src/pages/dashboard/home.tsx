@@ -1,4 +1,4 @@
-import { ReactComponent as SvgPeopleIdea } from "@/assets/img/illustrations/PeopleIdea.svg";
+import SvgPeopleIdea from "@/assets/img/illustrations/PeopleIdea.svg?react";
 import { getUser } from "@/contexts/AuthContext";
 import { DateTime } from "luxon";
 

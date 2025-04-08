@@ -1,12 +1,10 @@
-import { Home, User, LogOut, ChartPie, ChevronDown } from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { ReactComponent as SvgLogo } from "@/assets/img/logos/WenLockLogoWhite.svg";
-import { ReactComponent as SvgBadge } from "@/assets/img/icons/UserBadge.svg";
-import { ReactComponent as SvgChart } from "@/assets/img/icons/ChartPie.svg";
-import { ReactComponent as SvgChartFilled } from "@/assets/img/icons/ChartPieFilled.svg";
-import { ReactComponent as SvgUser } from "@/assets/img/icons/User.svg";
-import { ReactComponent as SvgChevronDown } from "@/assets/img/icons/ChevronDown.svg";
+import SvgChart from "@/assets/img/icons/ChartPie.svg?react";
+import SvgChevronDown from "@/assets/img/icons/ChevronDown.svg?react";
+import SvgUser from "@/assets/img/icons/User.svg?react";
+import SvgBadge from "@/assets/img/icons/UserBadge.svg?react";
+import SvgLogo from "@/assets/img/logos/WenLockLogoWhite.svg?react";
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Sidebar() {
   const navigate = useNavigate();

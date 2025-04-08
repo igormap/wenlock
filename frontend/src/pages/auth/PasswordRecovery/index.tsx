@@ -1,15 +1,12 @@
-import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
+import SvgLogo from "@/assets/img/logos/WenLockLogo.svg?react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router";
-import { ReactComponent as SvgEye } from "@/assets/img/icons/EyeOpen.svg";
-import { ReactComponent as SvgEyeClose } from "@/assets/img/icons/EyeClose.svg";
-import { ReactComponent as SvgLogo } from "@/assets/img/logos/WenLockLogo.svg";
-import { z } from "zod";
+import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { AlertCircle, ArrowLeftCircleIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router";
+import { toast } from "sonner";
+import { z } from "zod";
 
 export function PasswordRecovery() {
   const schema = z.object({

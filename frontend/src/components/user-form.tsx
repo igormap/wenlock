@@ -29,14 +29,14 @@ export const UserForm = ({ onSubmit }: Props) => {
             {...register("name")}
             placeholder="Insira o nome completo*"
             className="w-full h-14 bg-[#F4F4F4] border-none hover:bg-[#EAEAEA]"
-            error={errors.name?.message}
+            error={errors.name?.message?.toString()}
             maxLength={30}
           />
           <Input
             {...register("registration")}
             placeholder="Insira o Nº da matrícula"
             className="w-full h-14 bg-[#F4F4F4] border-none hover:bg-[#EAEAEA]"
-            error={errors.registration?.message}
+            error={errors.registration?.message?.toString()}
           />
         </FormLine>
         <FormLine>
@@ -44,7 +44,7 @@ export const UserForm = ({ onSubmit }: Props) => {
             {...register("email")}
             placeholder="Insira o email*"
             className="w-full h-14 bg-[#F4F4F4] border-none hover:bg-[#EAEAEA]"
-            error={errors.email?.message}
+            error={errors.email?.message?.toString()}
           />
         </FormLine>
 
@@ -55,7 +55,7 @@ export const UserForm = ({ onSubmit }: Props) => {
               {...register("password")}
               placeholder="Senha*"
               className="w-full h-14 bg-[#F4F4F4] border-none hover:bg-[#EAEAEA]"
-              error={errors.password?.message}
+              error={errors.password?.message?.toString()}
               type={showPassword ? "text" : "password"}
             />
             {showPassword ? (
@@ -75,7 +75,7 @@ export const UserForm = ({ onSubmit }: Props) => {
               {...register("confirmPassword")}
               placeholder="Repetir Senha*"
               className="w-full h-14 bg-[#F4F4F4] border-none hover:bg-[#EAEAEA]"
-              error={errors.confirmPassword?.message}
+              error={errors.confirmPassword?.message?.toString()}
               type={confirmPassword ? "text" : "password"}
             />
             {confirmPassword ? (
