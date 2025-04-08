@@ -9,8 +9,14 @@ export interface CreateUser {
 }
 
 export async function createUser(body: CreateUser): Promise<UserTokenResponse> {
+  console.log(body);
+
   const URL = "auth/register";
-  const res = await API.post<UserTokenResponse>(URL, body);
+  const res = await API.post<UserTokenResponse>(
+    URL,
+    body,
+    getAuthorizedHeader()
+  );
 
   return res.data;
 }

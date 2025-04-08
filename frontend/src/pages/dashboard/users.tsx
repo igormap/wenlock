@@ -38,7 +38,7 @@ export const UsersPage = () => {
   const deleteUser = async (registration: string) => {
     try {
       const res = await removeUser(registration);
-      mutate();
+      await mutate(undefined, { revalidate: true });
     } catch (error) {}
   };
 

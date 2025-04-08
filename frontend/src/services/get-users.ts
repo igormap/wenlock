@@ -1,4 +1,4 @@
-import { API } from "./api";
+import { API, getAuthorizedHeader } from "./api";
 
 export interface UserResponse {
   id: number;
@@ -9,8 +9,10 @@ export interface UserResponse {
 }
 
 export async function listUsers(search?: string): Promise<UserResponse[]> {
-  const response = await API.get<UserResponse[]>("/users");
+  const response = await API.get<UserResponse[]>(
+    "/users",
+    getAuthorizedHeader()
+  );
   console.log(response);
-
   return response.data;
 }

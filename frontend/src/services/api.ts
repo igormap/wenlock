@@ -1,4 +1,3 @@
-import { getToken } from "@/contexts/AuthContext";
 import axios from "axios";
 
 export const API = axios.create({
@@ -6,10 +5,14 @@ export const API = axios.create({
 });
 
 export const getAuthorizedHeader = (access_token?: string) => {
-  const storedToken = getToken();
+  const token = access_token || getToken();
   return {
     headers: {
-      Authorization: `Bearer ${access_token || storedToken}`,
+      Authorization: `Bearer ${token}`,
     },
   };
+};
+
+export const getToken = () => {
+  return localStorage.getItem("token");
 };

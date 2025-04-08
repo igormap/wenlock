@@ -1,11 +1,27 @@
 // src/users/users.controller.ts
-import { Controller, Get, Body, Param, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Body,
+  Param,
+  Put,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/strategies/jwt/jwt-aut.guard';
 
 @Controller('users')
 @ApiTags('Users')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -22,6 +38,13 @@ export class UsersController {
   getById(@Param('registration') registration: string) {
     return this.usersService.findOne(registration);
   }
+
+  // @ApiOperation({ summary: 'Cria um usuario' })
+  // @ApiResponse({ status: 200, description: 'Usuário criado com sucesso' })
+  // @Post()
+  // create(@Body() body: CreateUserDto) {
+  //   return this.usersService.create(body);
+  // }
 
   @ApiOperation({ summary: 'Edita um usuario' })
   @ApiResponse({ status: 200, description: 'Usuário editado com sucesso' })

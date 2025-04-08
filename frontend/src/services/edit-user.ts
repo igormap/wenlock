@@ -9,7 +9,11 @@ export interface EditUser {
 
 export async function editUser(body: EditUser): Promise<UserTokenResponse> {
   const URL = "/users/" + body.registration.toString();
-  const res = await API.put<UserTokenResponse>(URL, body);
+  const res = await API.put<UserTokenResponse>(
+    URL,
+    body,
+    getAuthorizedHeader()
+  );
 
   return res.data;
 }

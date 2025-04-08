@@ -92,7 +92,7 @@ export const AddUserPage = () => {
       const { password, ...bodyWithoutPassword } = body;
       user
         ? await editUser(bodyWithoutPassword)
-        : await createUser({ body, password: "" });
+        : await createUser({ ...body, password: password ?? "" });
       toast.success("Cadastro realizado");
       navigate("/dash/users");
     } catch (error) {

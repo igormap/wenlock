@@ -1,4 +1,4 @@
-import { API } from "./api";
+import { API, getAuthorizedHeader } from "./api";
 
 export interface UserResponse {
   id: number;
@@ -9,7 +9,10 @@ export interface UserResponse {
 }
 
 export async function removeUser(registration: string): Promise<UserResponse> {
-  const response = await API.delete<UserResponse>("/users/" + registration);
+  const response = await API.delete<UserResponse>(
+    "/users/" + registration,
+    getAuthorizedHeader()
+  );
 
   return response.data;
 }
