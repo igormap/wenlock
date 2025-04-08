@@ -13,7 +13,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://user:password@localhost:5432/wenlock"
+  url      = "postgresql://igor:password@localhost:5432/wenlock"
 }
 
 model User {

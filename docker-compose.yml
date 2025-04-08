@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres
+    container_name: db
+    restart: always
+    environment:
+      POSTGRES_USER: igor
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: seu_banco
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://igor:password@db:5432/seu_banco
+    ports:
+      - "3000:3000"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+    depends_on:
+      - backend
+    ports:
+      - "3001:80"
+
+volumes:
+  pgdata:
